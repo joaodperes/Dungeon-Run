@@ -1,0 +1,11 @@
+import { cp, mkdir, rm, readFile } from 'node:fs/promises';
+import { resolve } from 'node:path';
+const root=resolve(import.meta.dirname,'..');
+await rm(resolve(root,'dist'),{recursive:true,force:true});
+await mkdir(resolve(root,'dist'),{recursive:true});
+for(const path of ['index.html','src','assets'])await cp(resolve(root,path),resolve(root,'dist',path),{recursive:true,filter:source=>!source.endsWith('.test.js')});
+await cp(resolve(root,'LICENSE'),resolve(root,'dist/LICENSE'));
+await import('node:fs/promises').then(fs=>fs.writeFile(resolve(root,'dist/.nojekyll'),''));
+const html=await readFile(resolve(root,'dist/index.html'),'utf8');
+for(const match of html.matchAll(/(?:src|href)="([^"#]+)"/g))if(!/^https?:/.test(match[1]))await readFile(resolve(root,'dist',match[1]));
+console.log('Built static Dungeon Run in dist/ — no dependencies required.');

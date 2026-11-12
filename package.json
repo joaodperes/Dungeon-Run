@@ -1,0 +1,12 @@
+{
+  "name": "dungeon-run",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "A turn-based dungeon strategy game",
+  "scripts": {
+    "test": "node src/engine.test.js && node src/campaign.test.js && node src/ui.test.js",
+    "build": "node scripts/build.mjs",
+    "dev": "python3 -m http.server 5173"
+  }
+}
